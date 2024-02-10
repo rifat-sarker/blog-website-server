@@ -12,10 +12,10 @@ const cors = require('cors');
 const port = process.env.PORT || 5000;
 
 //http://localhost:5173
-// https://glittery-crepe-98ba25.netlify.app/
+// https://mixhub-blog-website.netlify.app/
 //middleware
 app.use(cors({
-  origin: ['https://glittery-crepe-98ba25.netlify.app'],
+  origin: ['http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json());
@@ -43,11 +43,12 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const blogCollection = client.db('blogDB').collection('blog')
     const wishlistCollection = client.db('blogDB').collection('wishlist')
-    const commentCollection = client.db('blogDB').collection('comment')
+    const pollCollection = client.db('blogDB').collection('polls')
+    
 
     /// verify token
     // const verifyToken = async (req, res, next) => {
@@ -151,6 +152,40 @@ async function run() {
       res.send(result)
     })
 
+
+    // quizz and polls related apies
+   let pollsData = [
+  {
+    question: 'What type of content do you prefer reading on our blog?',
+    options: ['Technical tutorials', 'How-to guides', 'Industry news and updates', 'Opinion pieces and editorials'],
+    votes: [0, 0, 0, 0]
+  },
+  {
+    question: 'How often do you visit our blog?',
+    options: ['Daily', 'Weekly', 'Monthly', 'Rarely or never'],
+    votes: [0, 0, 0, 0]
+  },
+  {
+    question: 'Which social media platform do you use the most for discovering blog content?',
+    options: ['Facebook', 'Twitter', 'LinkedIn', 'Instagram'],
+    votes: [0, 0, 0, 0]
+  },
+  {
+    question: 'What motivates you to engage with a blog post?',
+    options: ['Interesting topic', 'Engaging writing style', 'Useful information', 'Visual content (e.g., images, videos)',],
+    votes: [0, 0, 0, 0]
+  }
+];
+
+app.get('/api/poll', (req, res) => {
+  res.json(pollsData);
+});
+
+app.post('/api/vote', (req, res) => {
+  const { questionIndex, optionIndex } = req.body;
+  pollsData[questionIndex].votes[optionIndex]++;
+  res.sendStatus(200);
+});
 
 
 
