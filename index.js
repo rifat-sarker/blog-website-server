@@ -9,10 +9,15 @@ const port = process.env.PORT || 5000;
 
 //http://localhost:5173
 // https://mixhub-blog-website.netlify.app/
+// https://blog-website-9663d.web.app
+// https://blog-website-9663d.firebaseapp.com
 //middleware
 app.use(
   cors({
-    origin: ["https://blog-website-9663d.web.app","https://blog-website-9663d.firebaseapp.com/"],
+    origin: [
+      "https://blog-platform-seven-zeta.vercel.app",
+      "http://localhost:5173",
+    ],
     credentials: true,
   })
 );
@@ -191,14 +196,14 @@ async function run() {
     });
 
     app.post("/api/vote", async (req, res) => {
-      const { questionIndex, optionIndex, } = req.body;
+      const { questionIndex, optionIndex } = req.body;
       try {
         // Validate questionIndex
         if (questionIndex < 0 || questionIndex >= pollsData.length) {
           return res.status(404).json({ error: "Invalid question index" });
         }
 
-        // Update vote count 
+        // Update vote count
         await pollCollection.updateOne(
           { question: pollsData[questionIndex].question },
           { $inc: { [`votes.${optionIndex}`]: 1 } }
