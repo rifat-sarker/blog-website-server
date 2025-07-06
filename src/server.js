@@ -6,10 +6,7 @@ let server;
 
 async function main() {
   try {
-    await mongoose.connect(config.database_url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(config.database_url);
     console.log("✅ Database connected successfully!");
 
     server = app.listen(config.port, () => {
