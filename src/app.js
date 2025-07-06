@@ -1,31 +1,17 @@
-import router from "./app/routes";
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-const express = require("express");
 const app = express();
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-require("dotenv").config();
-const port = process.env.PORT || 5000;
-const cors = require("cors");
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Middleware
-app.use(
-  cors({
-    origin: [
-      "https://blog-platform-seven-zeta.vercel.app",
-      "http://localhost:5173",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
 
-app.get("/", (request, response) => {
-  response.send("Welcome to my portfolio API");
+// Test route
+app.get("/", (req, res) => {
+  res.send("Blog Website Server is Running 🚀");
 });
-
-// application routes
-app.use("/api", router);
 
 export default app;
