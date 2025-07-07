@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { BlogRoutes } from "./app/modules/blog/blog.route";
+import router from "./app/routes";
+
 
 const app = express();
 
@@ -11,8 +12,18 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+  cors({
+    origin: [
+      "https://bicycle-store-client.vercel.app",
+      "http://localhost:5173",
+    ],
+    credentials: true,
+  })
+);
+
 // Blog routes
-app.use("/api", BlogRoutes);
+app.use("/api", router);
 
 // Test route
 app.get("/", (req, res) => {
