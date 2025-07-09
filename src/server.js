@@ -1,20 +1,31 @@
 import mongoose from "mongoose";
+import config from "./app/config/index.js"; // Relative to src/
 import app from "./app.js";
-import config from "./app/config/index.js";
 
-let server;
+let isConnected = false;
 
-async function main() {
+async function connectDB() {
+  if (isConnected) return;
   try {
     await mongoose.connect(config.database_url);
-    console.log("✅ Database connected successfully!");
-
-    server = app.listen(config.port, () => {
-      console.log(`🚀 Server is running on port ${config.port}`);
-    });
+    isConnected = true;
+    console.log("✅ Database connected");
   } catch (error) {
-    console.error("❌ Failed to connect to database:", error);
+    console.error("❌ Failed to connect DB:", error);
   }
 }
 
-main();
+export default async function handler(req, res) {
+  await connectDB();
+  return app(req, res);
+}
+
+// Only run the server if not in Vercel (local/dev mode)
+if (process.env.NODE_ENV !== "production") {
+  const PORT = config.port || 5000;
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  });
+}

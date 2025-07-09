@@ -1,15 +1,12 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import router from "./app/routes";
-
+import router from "./app/routes/index.js";
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(

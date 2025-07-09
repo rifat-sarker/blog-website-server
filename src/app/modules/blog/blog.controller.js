@@ -3,13 +3,15 @@ import { BlogServices } from "./blog.service.js";
 // Create Blog
 const createBlog = async (req, res) => {
   try {
-    const newBlog = req.body;
-    const result = await BlogServices.createBlog(newBlog);
+    console.log("REQ BODY", req.body); 
+    const result = await BlogServices.createBlog(req.body);
     res.status(201).send(result);
   } catch (error) {
+    console.error("Blog Creation Error:", error);
     res.status(500).send({ error: "Failed to create blog" });
   }
 };
+
 
 // Get All Blogs
 const getAllBlogs = async (req, res) => {

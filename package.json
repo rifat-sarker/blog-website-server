@@ -1,11 +1,12 @@
 {
   "name": "blog-website-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun src/server.js"
+    "dev": "bun src/server.js",
+    "start": "NODE_ENV=production node src/server.js"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,5 @@
-import Blog from "./blog.model";
+import Blog from "./blog.model.js";
+
 
 // Create Blog
 const createBlog = async (blogData) => {
