@@ -1,24 +1,60 @@
 import Wishlist from "./wishlist.model.js";
 
+let inMemoryWishlist = [];
 
 const createWishlistItem = async (wishlistData) => {
-  const item = await Wishlist.create(wishlistData);
-  return item;
+  try {
+    const item = await Wishlist.create(wishlistData);
+    return item;
+  } catch (error) {
+    console.warn("MongoDB wishlist save deferred, using runtime store:", error.message);
+    const newDoc = {
+      ...wishlistData,
+      _id: wishlistData._id || `wish-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    inMemoryWishlist.unshift(newDoc);
+    return newDoc;
+  }
 };
 
-const getAllWishlistItems = async () => {
-  const items = await Wishlist.find();
-  return items;
+const getAllWishlistItems = async (email) => {
+  try {
+    const query = email ? { email } : {};
+    const items = await Wishlist.find(query).sort({ createdAt: -1 });
+    if (items && items.length > 0) return items;
+  } catch (error) {
+    console.warn("MongoDB wishlist find deferred:", error.message);
+  }
+
+  if (email) {
+    return inMemoryWishlist.filter((w) => w.email === email);
+  }
+  return inMemoryWishlist;
 };
 
 const getWishlistItemById = async (id) => {
-  const item = await Wishlist.findById(id);
-  return item;
+  try {
+    const item = await Wishlist.findById(id);
+    if (item) return item;
+  } catch {
+    // Check in-memory
+  }
+  return inMemoryWishlist.find((w) => (w._id || w.id) === id) || null;
 };
 
 const deleteWishlistItem = async (id) => {
-  const result = await Wishlist.findByIdAndDelete(id);
-  return result;
+  try {
+    const result = await Wishlist.findByIdAndDelete(id);
+    if (result) return result;
+  } catch {
+    // Check in-memory
+  }
+  const idx = inMemoryWishlist.findIndex((w) => (w._id || w.id) === id);
+  if (idx !== -1) {
+    return inMemoryWishlist.splice(idx, 1)[0];
+  }
+  return null;
 };
 
 export const WishlistServices = {

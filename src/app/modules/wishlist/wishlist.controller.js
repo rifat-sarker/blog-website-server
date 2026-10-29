@@ -1,22 +1,22 @@
 import { WishlistServices } from "./wishlist.service.js";
 
-
 const createWishlistItem = async (req, res) => {
   try {
     const wishlistData = req.body;
     const result = await WishlistServices.createWishlistItem(wishlistData);
-    res.status(201).send(result);
+    res.status(201).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to create wishlist item" });
+    res.status(500).json({ error: "Failed to create wishlist item", message: error.message });
   }
 };
 
 const getAllWishlistItems = async (req, res) => {
   try {
-    const result = await WishlistServices.getAllWishlistItems();
-    res.status(200).send(result);
+    const { email } = req.query;
+    const result = await WishlistServices.getAllWishlistItems(email);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to get wishlist items" });
+    res.status(500).json({ error: "Failed to get wishlist items", message: error.message });
   }
 };
 
@@ -25,11 +25,11 @@ const getWishlistItemById = async (req, res) => {
     const { id } = req.params;
     const result = await WishlistServices.getWishlistItemById(id);
     if (!result) {
-      return res.status(404).send({ error: "Wishlist item not found" });
+      return res.status(404).json({ error: "Wishlist item not found" });
     }
-    res.status(200).send(result);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to get wishlist item" });
+    res.status(500).json({ error: "Failed to get wishlist item", message: error.message });
   }
 };
 
@@ -38,11 +38,11 @@ const deleteWishlistItem = async (req, res) => {
     const { id } = req.params;
     const result = await WishlistServices.deleteWishlistItem(id);
     if (!result) {
-      return res.status(404).send({ error: "Wishlist item not found" });
+      return res.status(404).json({ error: "Wishlist item not found" });
     }
-    res.status(200).send({ message: "Wishlist item deleted successfully" });
+    res.status(200).json({ message: "Wishlist item deleted successfully" });
   } catch (error) {
-    res.status(500).send({ error: "Failed to delete wishlist item" });
+    res.status(500).json({ error: "Failed to delete wishlist item", message: error.message });
   }
 };
 
