@@ -72,8 +72,19 @@ const getAllBlogs = async (searchTerm) => {
   return blogs;
 };
 
+const resolveBlogId = (id) => {
+  const ESSAY_MAP = {
+    "essay-01": "6ae4e56d6c62cabbd8072082",
+    "essay-02": "6ae4e56d6c62cabbd8072084",
+    "essay-03": "6ae4e56d6c62cabbd8072086",
+    "essay-04": "6ae4e56d6c62cabbd8072088",
+  };
+  return ESSAY_MAP[id] || id;
+};
+
 // Get Single Blog
-const getSingleBlog = async (id) => {
+const getSingleBlog = async (rawId) => {
+  const id = resolveBlogId(rawId);
   const cacheKey = `mixhub:blog:${id}`;
   const cached = await cache.get(cacheKey);
   if (cached) return cached;
@@ -81,17 +92,19 @@ const getSingleBlog = async (id) => {
   let blog = null;
   if (mongoose.connection.readyState === 1) {
     try {
-      blog = await Blog.findById(id);
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        blog = await Blog.findById(id);
+      }
       if (!blog) {
         blog = await Blog.findOne({ _id: id });
       }
-    } catch {
-      // Ignored
+    } catch (err) {
+      console.warn("MongoDB getSingleBlog error:", err.message);
     }
   }
 
   if (!blog) {
-    blog = inMemoryBlogs.find((b) => (b._id || b.id) === id);
+    blog = inMemoryBlogs.find((b) => (b._id || b.id) === id || (b._id || b.id) === rawId);
   }
 
   if (blog) {
@@ -101,21 +114,24 @@ const getSingleBlog = async (id) => {
 };
 
 // Clap / Like Blog dynamically
-const clapBlog = async (id) => {
+const clapBlog = async (rawId) => {
+  const id = resolveBlogId(rawId);
   let clapsCount = 0;
-  if (mongoose.connection.readyState === 1) {
+  if (mongoose.connection.readyState === 1 && mongoose.Types.ObjectId.isValid(id)) {
     try {
       const doc = await Blog.findByIdAndUpdate(id, { $inc: { claps: 1 } }, { new: true });
       if (doc) {
         await cache.del(`mixhub:blog:${id}`);
+        await cache.del(`mixhub:blog:${rawId}`);
+        await cache.flushPattern("mixhub:blogs");
         return { claps: doc.claps };
       }
-    } catch {
-      // Memory fallback
+    } catch (err) {
+      console.warn("MongoDB clap error:", err.message);
     }
   }
 
-  const blog = inMemoryBlogs.find((b) => (b._id || b.id) === id);
+  const blog = inMemoryBlogs.find((b) => (b._id || b.id) === id || (b._id || b.id) === rawId);
   if (blog) {
     blog.claps = (blog.claps || 0) + 1;
     clapsCount = blog.claps;
@@ -123,20 +139,21 @@ const clapBlog = async (id) => {
     clapsCount = 1;
   }
   await cache.del(`mixhub:blog:${id}`);
+  await cache.del(`mixhub:blog:${rawId}`);
   return { claps: clapsCount };
 };
 
 // Add Comment dynamically
-const addComment = async (id, commentData) => {
+const addComment = async (rawId, commentData) => {
+  const id = resolveBlogId(rawId);
   const comment = {
-    _id: `c-${Date.now()}`,
     author: commentData.author || "Reader",
     avatar: commentData.avatar || "",
     text: commentData.text,
     date: new Date().toISOString(),
   };
 
-  if (mongoose.connection.readyState === 1) {
+  if (mongoose.connection.readyState === 1 && mongoose.Types.ObjectId.isValid(id)) {
     try {
       const doc = await Blog.findByIdAndUpdate(
         id,
@@ -145,18 +162,21 @@ const addComment = async (id, commentData) => {
       );
       if (doc) {
         await cache.del(`mixhub:blog:${id}`);
+        await cache.del(`mixhub:blog:${rawId}`);
+        await cache.flushPattern("mixhub:blogs");
         return doc.comments;
       }
-    } catch {
-      // Memory fallback
+    } catch (err) {
+      console.warn("MongoDB addComment error:", err.message);
     }
   }
 
-  const blog = inMemoryBlogs.find((b) => (b._id || b.id) === id);
+  const blog = inMemoryBlogs.find((b) => (b._id || b.id) === id || (b._id || b.id) === rawId);
   if (blog) {
     if (!blog.comments) blog.comments = [];
-    blog.comments.unshift(comment);
+    blog.comments.unshift({ ...comment, _id: `c-${Date.now()}` });
     await cache.del(`mixhub:blog:${id}`);
+    await cache.del(`mixhub:blog:${rawId}`);
     return blog.comments;
   }
 
