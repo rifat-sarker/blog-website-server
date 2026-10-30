@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+const commentSchema = new mongoose.Schema(
+  {
+    author: { type: String, default: "Reader" },
+    avatar: { type: String, default: "" },
+    text: { type: String, required: true },
+    date: { type: String, default: () => new Date().toISOString() },
+  },
+  { _id: true, timestamps: true }
+);
+
 const blogSchema = new mongoose.Schema(
   {
     kicker: { type: mongoose.Schema.Types.Mixed, default: "" },
@@ -19,7 +29,8 @@ const blogSchema = new mongoose.Schema(
     },
     readTime: { type: mongoose.Schema.Types.Mixed, default: "6 min read" },
     words: { type: Number, default: 750 },
-    claps: { type: Number, default: 0 },
+    claps: { type: Number, default: 42 },
+    comments: [commentSchema],
   },
   { timestamps: true }
 );

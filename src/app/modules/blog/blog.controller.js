@@ -1,76 +1,83 @@
 import { BlogServices } from "./blog.service.js";
 
-// Create Blog
 const createBlog = async (req, res) => {
   try {
-    console.log("REQ BODY", req.body); 
-    const result = await BlogServices.createBlog(req.body);
-    res.status(201).send(result);
+    const blogData = req.body;
+    const result = await BlogServices.createBlog(blogData);
+    res.status(201).json(result);
   } catch (error) {
-    console.error("Blog Creation Error:", error);
-    res.status(500).send({ error: "Failed to create blog" });
+    res.status(500).json({ error: "Failed to create blog", message: error.message });
   }
 };
 
-
-// Get All Blogs
 const getAllBlogs = async (req, res) => {
   try {
-    const result = await BlogServices.getAllBlogs();
-    res.status(200).send(result);
+    const { q } = req.query;
+    const result = await BlogServices.getAllBlogs(q);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to fetch blogs" });
+    res.status(500).json({ error: "Failed to get blogs", message: error.message });
   }
 };
 
-// Get Single Blog
 const getSingleBlog = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await BlogServices.getSingleBlog(id);
-
     if (!result) {
-      return res.status(404).send({ error: "Blog not found" });
+      return res.status(404).json({ error: "Blog not found" });
     }
-
-    res.status(200).send(result);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to fetch blog" });
+    res.status(500).json({ error: "Failed to get blog", message: error.message });
   }
 };
 
-// Update Blog
+const clapBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await BlogServices.clapBlog(id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to clap story", message: error.message });
+  }
+};
+
+const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const commentData = req.body;
+    const result = await BlogServices.addComment(id, commentData);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add comment", message: error.message });
+  }
+};
+
 const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-
     const result = await BlogServices.updateBlog(id, updateData);
-
     if (!result) {
-      return res.status(404).send({ error: "Blog not found" });
+      return res.status(404).json({ error: "Blog not found" });
     }
-
-    res.status(200).send({ message: "Blog updated successfully" });
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).send({ error: "Failed to update blog" });
+    res.status(500).json({ error: "Failed to update blog", message: error.message });
   }
 };
 
-// Delete Blog
 const deleteBlog = async (req, res) => {
   try {
     const { id } = req.params;
-
     const result = await BlogServices.deleteBlog(id);
-
     if (!result) {
-      return res.status(404).send({ error: "Blog not found" });
+      return res.status(404).json({ error: "Blog not found" });
     }
-
-    res.status(200).send({ message: "Blog deleted successfully" });
+    res.status(200).json({ message: "Blog deleted successfully" });
   } catch (error) {
-    res.status(500).send({ error: "Failed to delete blog" });
+    res.status(500).json({ error: "Failed to delete blog", message: error.message });
   }
 };
 
@@ -78,6 +85,8 @@ export const BlogController = {
   createBlog,
   getAllBlogs,
   getSingleBlog,
+  clapBlog,
+  addComment,
   updateBlog,
   deleteBlog,
 };
