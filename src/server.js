@@ -15,7 +15,7 @@ async function connectDB() {
 
   try {
     await mongoose.connect(config.database_url, {
-      serverSelectionTimeoutMS: 3000,
+      serverSelectionTimeoutMS: 5000,
     });
     isConnected = true;
     console.log("✅ MongoDB Connected Successfully");
@@ -24,7 +24,8 @@ async function connectDB() {
     const count = await Blog.countDocuments();
     if (count === 0) {
       console.log("🌱 Database empty. Seeding initial broadsheet monographs...");
-      await Blog.insertMany(SEED_ESSAYS);
+      const cleanSeed = SEED_ESSAYS.map(({ _id, ...rest }) => rest);
+      await Blog.insertMany(cleanSeed);
       console.log("✨ Seeding completed.");
     }
   } catch (error) {
