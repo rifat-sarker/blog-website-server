@@ -36,7 +36,8 @@ const getSingleBlog = async (req, res) => {
 const clapBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await BlogServices.clapBlog(id);
+    const { action } = req.body || {};
+    const result = await BlogServices.clapBlog(id, action);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Failed to clap story", message: error.message });

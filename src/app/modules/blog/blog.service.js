@@ -117,18 +117,33 @@ const getSingleBlog = async (rawId) => {
   return blog;
 };
 
-// Clap / Like Blog dynamically
-const clapBlog = async (rawId) => {
+// Clap / Like / Unlike Blog dynamically
+const clapBlog = async (rawId, action = "like") => {
   const id = resolveBlogId(rawId);
+  const delta = action === "unlike" ? -1 : 1;
   let clapsCount = 0;
+
   if (mongoose.connection.readyState === 1 && mongoose.Types.ObjectId.isValid(id)) {
     try {
-      const doc = await Blog.findByIdAndUpdate(id, { $inc: { claps: 1 } }, { new: true });
+      let doc;
+      if (delta < 0) {
+        doc = await Blog.findOneAndUpdate(
+          { _id: id, claps: { $gt: 0 } },
+          { $inc: { claps: -1 } },
+          { new: true }
+        );
+        if (!doc) {
+          doc = await Blog.findById(id);
+        }
+      } else {
+        doc = await Blog.findByIdAndUpdate(id, { $inc: { claps: 1 } }, { new: true });
+      }
+
       if (doc) {
         await cache.del(`mixhub:blog:${id}`);
         await cache.del(`mixhub:blog:${rawId}`);
         await cache.flushPattern("mixhub:blogs");
-        return { claps: doc.claps };
+        return { claps: Math.max(0, doc.claps || 0) };
       }
     } catch (err) {
       console.warn("MongoDB clap error:", err.message);
@@ -137,10 +152,10 @@ const clapBlog = async (rawId) => {
 
   const blog = inMemoryBlogs.find((b) => (b._id || b.id) === id || (b._id || b.id) === rawId);
   if (blog) {
-    blog.claps = (blog.claps || 0) + 1;
+    blog.claps = Math.max(0, (blog.claps || 0) + delta);
     clapsCount = blog.claps;
   } else {
-    clapsCount = 1;
+    clapsCount = delta > 0 ? 1 : 0;
   }
   await cache.del(`mixhub:blog:${id}`);
   await cache.del(`mixhub:blog:${rawId}`);

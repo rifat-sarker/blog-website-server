@@ -54,13 +54,19 @@ const getWishlistItemById = async (id) => {
 const deleteWishlistItem = async (id) => {
   if (mongoose.connection.readyState === 1) {
     try {
-      const result = await Wishlist.findByIdAndDelete(id);
+      let result = null;
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        result = await Wishlist.findByIdAndDelete(id);
+      }
+      if (!result) {
+        result = await Wishlist.findOneAndDelete({ blogId: id });
+      }
       if (result) return result;
     } catch {
       // Check in-memory
     }
   }
-  const idx = inMemoryWishlist.findIndex((w) => (w._id || w.id) === id);
+  const idx = inMemoryWishlist.findIndex((w) => (w._id || w.id) === id || w.blogId === id);
   if (idx !== -1) {
     return inMemoryWishlist.splice(idx, 1)[0];
   }
