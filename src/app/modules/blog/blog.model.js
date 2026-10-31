@@ -29,7 +29,7 @@ const blogSchema = new mongoose.Schema(
     },
     readTime: { type: mongoose.Schema.Types.Mixed, default: "6 min read" },
     words: { type: Number, default: 750 },
-    claps: { type: Number, default: 42 },
+    claps: { type: Number, default: 0 },
     comments: [commentSchema],
   },
   { timestamps: true }

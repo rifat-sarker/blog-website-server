@@ -20,9 +20,15 @@ let inMemoryBlogs = SEED_ESSAYS.map((b) => ({
 
 // Create Blog & Invalidate Cache
 const createBlog = async (blogData) => {
+  const payload = {
+    ...blogData,
+    claps: typeof blogData.claps === "number" ? blogData.claps : 0,
+    comments: Array.isArray(blogData.comments) ? blogData.comments : [],
+  };
+
   if (mongoose.connection.readyState === 1) {
     try {
-      const blog = await Blog.create(blogData);
+      const blog = await Blog.create(payload);
       await cache.flushPattern("mixhub:blogs");
       return blog;
     } catch (error) {
@@ -31,10 +37,8 @@ const createBlog = async (blogData) => {
   }
 
   const newDoc = {
-    ...blogData,
+    ...payload,
     _id: blogData._id || `essay-${Date.now()}`,
-    claps: 0,
-    comments: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
