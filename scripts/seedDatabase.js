@@ -8,9 +8,12 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
-const DATABASE_URL =
-  process.env.DATABASE_URL ||
-  "mongodb+srv://blogUser:F8HEGqjS5FKA0Sd6@cluster0.l80xyen.mongodb.net/blogDBB";
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  console.error("Error: DATABASE_URL environment variable is missing. Please define it in your .env file.");
+  process.exit(1);
+}
 
 const commentSchema = new mongoose.Schema(
   {
