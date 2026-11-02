@@ -80,7 +80,7 @@ Modern rack servers equipped with 128-core AMD EPYC processors and PCIe Gen 5 NV
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -150,7 +150,7 @@ With the standardized WebAssembly System Interface (WASI), edge runtimes run pol
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -318,7 +318,7 @@ This guarantees that within any given actor, execution is strictly single-thread
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -394,7 +394,7 @@ In 2026, the quietest and most impactful engineering breakthroughs are not more 
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -459,7 +459,7 @@ By organizing applications as Modular Monoliths—enforcing package boundaries a
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -563,7 +563,7 @@ A kernel-level verifier proves memory safety and termination before execution, g
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -696,7 +696,7 @@ When contrast ratios, optical kerning, and rhythmic baselines are respected, the
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -795,7 +795,7 @@ Reclaiming cognitive sovereignty requires intentional boundaries: silencing non-
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -819,7 +819,7 @@ In modern programming, we often view constraints—memory limits, battery life, 
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -898,7 +898,7 @@ Cognitive scientists demonstrate that every time a worker glances at an email or
       name: "Rifat Sarker",
       location: "Dhaka Bureau",
       role: "Lead Editor",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -928,7 +928,7 @@ Coupled with Erbium-Doped Fiber Amplifiers (EDFA) powered by subsea copper condu
       name: "Dr. Sajed Rahman",
       location: "Dhaka",
       role: "Research Scientist",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -976,7 +976,7 @@ Modern hyperscale facilities submerge entire server blades directly into non-con
       name: "Dr. Sajed Rahman",
       location: "Dhaka",
       role: "Research Scientist",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 
@@ -1000,7 +1000,7 @@ Urban daylighting projects around the globe demonstrate that concrete drainage p
       name: "Dr. Sajed Rahman",
       location: "Dhaka",
       role: "Research Scientist",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     },
   },
 

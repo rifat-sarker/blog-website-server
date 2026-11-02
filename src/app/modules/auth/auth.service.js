@@ -72,7 +72,7 @@ const verifyOTP = async (email, otpCode) => {
       email: normalizedEmail,
       name: normalizedEmail.split("@")[0].replace(/[._]/g, " "),
       role: "Contributing Writer",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
     };
   }
 
@@ -104,7 +104,7 @@ const googleLogin = async ({ email, name, avatar, googleId }) => {
         user = await User.create({
           email: normalizedEmail,
           name: name || normalizedEmail.split("@")[0],
-          avatar: avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+          avatar: avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
           role: "Staff Essayist",
           authProvider: "google",
         });
@@ -124,7 +124,7 @@ const googleLogin = async ({ email, name, avatar, googleId }) => {
       _id: `usr-${Date.now()}`,
       email: normalizedEmail,
       name: name || normalizedEmail.split("@")[0],
-      avatar: avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      avatar: avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
       role: "Staff Essayist",
     };
   }
