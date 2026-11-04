@@ -32,16 +32,16 @@ const verifyOTP = async (req, res) => {
 
 const googleLogin = async (req, res) => {
   try {
-    const { email, name, avatar, googleId } = req.body;
-    if (!email) {
-      return res.status(400).json({ error: "Email is required for Google authentication." });
+    const { email, name, avatar, googleId, credentialToken } = req.body;
+    if (!email && !credentialToken) {
+      return res.status(400).json({ error: "Email or credential token is required for Google authentication." });
     }
 
-    const result = await AuthServices.googleLogin({ email, name, avatar, googleId });
+    const result = await AuthServices.googleLogin({ email, name, avatar, googleId, credentialToken });
     res.status(200).json(result);
   } catch (error) {
     console.error("Google Login Controller Error:", error);
-    res.status(500).json({ error: "Google authentication failed.", message: error.message });
+    res.status(401).json({ error: "Google authentication failed.", message: error.message });
   }
 };
 
