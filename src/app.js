@@ -20,11 +20,18 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, etc.)
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app") ||
+        origin.endsWith(".rifatsarker.com");
+
+      if (isAllowed || config.node_env !== "production") {
         return callback(null, true);
       }
-      return callback(null, true); // Permissive in dev
+      return callback(new Error("CORS policy does not allow access from the specified Origin."), false);
     },
     credentials: true,
   })
