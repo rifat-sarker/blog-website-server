@@ -99,8 +99,17 @@ const getSingleBlog = async (rawId) => {
       if (mongoose.Types.ObjectId.isValid(id)) {
         blog = await Blog.findById(id);
       }
-      if (!blog) {
-        blog = await Blog.findOne({ _id: id });
+      if (!blog && typeof id === "string") {
+        const words = id.split("-").filter(Boolean).slice(0, 4);
+        if (words.length > 0) {
+          const pattern = words.join(".*");
+          blog = await Blog.findOne({
+            $or: [
+              { title: { $regex: new RegExp(pattern, "i") } },
+              { "title.en": { $regex: new RegExp(pattern, "i") } },
+            ],
+          });
+        }
       }
     } catch (err) {
       console.warn("MongoDB getSingleBlog error:", err.message);
@@ -119,7 +128,11 @@ const getSingleBlog = async (rawId) => {
 
 // Clap / Like / Unlike Blog dynamically
 const clapBlog = async (rawId, action = "like") => {
-  const id = resolveBlogId(rawId);
+  let id = resolveBlogId(rawId);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const found = await getSingleBlog(rawId);
+    if (found?._id) id = found._id.toString();
+  }
   const delta = action === "unlike" ? -1 : 1;
   let clapsCount = 0;
 
@@ -164,7 +177,11 @@ const clapBlog = async (rawId, action = "like") => {
 
 // Add Comment dynamically
 const addComment = async (rawId, commentData) => {
-  const id = resolveBlogId(rawId);
+  let id = resolveBlogId(rawId);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const found = await getSingleBlog(rawId);
+    if (found?._id) id = found._id.toString();
+  }
   const comment = {
     author: commentData.author || "Reader",
     avatar: commentData.avatar || "",
